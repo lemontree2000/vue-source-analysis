@@ -168,6 +168,7 @@ export function mountComponent (
 
   let updateComponent
   /* istanbul ignore if */
+  // 在非生产环境，开启性能追踪，会做一些标识，便以追踪render和update的性能
   if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
     updateComponent = () => {
       const name = vm._name
@@ -176,16 +177,19 @@ export function mountComponent (
       const endTag = `vue-perf-end:${id}`
 
       mark(startTag)
+      // 调用render函数
       const vnode = vm._render()
       mark(endTag)
       measure(`vue ${name} render`, startTag, endTag)
 
       mark(startTag)
+      // 更新DOM节点
       vm._update(vnode, hydrating)
       mark(endTag)
       measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
+    // 生产环境或没开启性能追踪则直接更新render函数生成的vnode
     updateComponent = () => {
       vm._update(vm._render(), hydrating)
     }
@@ -206,7 +210,9 @@ export function mountComponent (
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
+    // 表示 根Vue的实例
     vm._isMounted = true
+    // 执行mounted 钩子函数
     callHook(vm, 'mounted')
   }
   return vm

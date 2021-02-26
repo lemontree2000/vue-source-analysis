@@ -18,6 +18,7 @@ initMixin(Vue)
 stateMixin(Vue)
 eventsMixin(Vue)
 lifecycleMixin(Vue)
+// 在原型上混入render相关方法
 renderMixin(Vue)
 
 export default Vue
